@@ -15,10 +15,12 @@
 // along with smtp_discord_bridge.  If not, see <https://www.gnu.org/licenses/>.
 
 use clap::{crate_authors, crate_description, crate_name, crate_version, App, Arg};
+use samotop::model::command::SmtpMail;
 use samotop::model::mail::Envelope;
 use samotop::service::session::StatefulSessionService;
 use samotop::service::tcp::SamotopService;
 use serenity::builder::ExecuteWebhook;
+use serenity::model::channel::Embed;
 use smtp_discord_bridge::config::Config;
 use smtp_discord_bridge::smtp::wrap_mailer_service;
 use smtp_discord_bridge::{DiscordMailerBuilder, MailToDiscord};
@@ -30,7 +32,21 @@ struct MMTD;
 
 impl MailToDiscord for MMTD {
     fn handle(&mut self, envelope: Envelope, body: Vec<u8>, webhook_builder: &mut ExecuteWebhook) {
-        webhook_builder.content("owo");
+        use SmtpMail::*;
+        let sender = match envelope.mail.unwrap() {
+            Mail(p) => p,
+            Send(p) => p,
+            Saml(p) => p,
+            Soml(p) => p,
+        };
+        let rcpt = envelope.rcpts.get(0).unwrap();
+        let embed = Embed::fake(|e| {
+            e.title("New Message")
+                .field("From", sender.to_string(), true)
+                .field("To", rcpt.to_string(), true)
+                .field("Body", String::from_utf8(body).unwrap(), false)
+        });
+        webhook_builder.embeds(vec![embed]);
     }
 }
 
