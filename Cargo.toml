@@ -1,0 +1,21 @@
+[package]
+name = "smtp_to_discord"
+version = "0.1.0"
+authors = ["Jade"]
+license = "GPL-3.0-or-later"
+description = "SMTP server that forwards messages to a Discord webhook"
+keywords = ["sysadmin", "discord", "smtp"]
+categories = ["email"]
+repository = "https://github.com/witchof0x20/smtp_discord_bridge"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bytes = "0.4"
+env_logger = "0.7"
+futures = "0.1"
+log = "0.4"
+samotop = "0"
+serenity = "0.8"
+tokio = "^0.1"
