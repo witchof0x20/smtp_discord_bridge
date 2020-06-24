@@ -6,4 +6,7 @@ This program hosts an SMTP server that will forward all messages to a Discord br
 ## How to run
 
 * Install rust
+* Install OpenSSL
 * `cargo run --release`
+
+If using NixOS, `nix-shell` should provide all the necessary dependencies
